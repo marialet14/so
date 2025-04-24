@@ -5,6 +5,9 @@ import random
 NUM_FILOSOFOS = 5
 TEMPO_EXECUCAO = 10  # segundos
 
+# Lista de nomes dos filósofos
+nomes = ["Sócrates", "Platão", "Aristóteles", "Descartes", "Nietzsche"]
+
 estados = ["pensando"] * NUM_FILOSOFOS  # Lista de estados
 garfos = [threading.Lock() for _ in range(NUM_FILOSOFOS)]  # Lista de locks
 
@@ -13,7 +16,7 @@ def filosofo(id):
     while time.time() - inicio < TEMPO_EXECUCAO:
         # Pensando
         estados[id] = "pensando"
-        print(f"🧠 Filósofo {id} está pensando.")
+        print(f"🧠 {nomes[id]} está pensando.")
         time.sleep(random.uniform(0.5, 1.5))
 
         # Decide ordem de pegar os garfos pra evitar deadlock
@@ -28,7 +31,7 @@ def filosofo(id):
             with garfos[segundo]:
                 # Comendo
                 estados[id] = "comendo"
-                print(f"🍽️ Filósofo {id} está comendo com garfos {primeiro} e {segundo}.")
+                print(f"🍽️ {nomes[id]} está comendo com os garfos {primeiro} e {segundo}.")
                 time.sleep(random.uniform(0.5, 1.5))
 
     estados[id] = "terminou"
@@ -47,4 +50,5 @@ for t in threads:
 # Estado final
 print("\n📊 Estado final dos filósofos:")
 for i in range(NUM_FILOSOFOS):
-    print(f"Filósofo {i}: {estados[i]}")
+    print(f"{nomes[i]}: {estados[i]}")
+

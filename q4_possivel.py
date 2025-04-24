@@ -18,7 +18,15 @@ mutex_estado = threading.Lock()
 def mostrar_situacao():
     with mutex_estado:
         for i in range(numero_filosofos):
-            print(f"{nomes[i]:<12}: {estados[i]}")
+            if estados[i] == 'pensando':
+                print(f"{nomes[i]:<12}: \033[1;36m{estados[i]}\033[0m")
+
+            elif estados[i] == 'terminou':
+                print(f"{nomes[i]:<12}: \033[1;31m{estados[i]}\033[0m")
+            
+            else:
+                print(f"{nomes[i]:<12}: {estados[i]}")
+            
 
         garfos_usados = []
         for i in range(numero_filosofos):
@@ -26,11 +34,11 @@ def mostrar_situacao():
                 garfos_usados.append((i + 1, uso_garfos[i]))
 
         for garfo, filosofo in garfos_usados:
-            print(f"{nomes[filosofo]} está comendo com os garfos {garfo} e {garfo + 1}")
+            print(f"\033[1;33m{nomes[filosofo]} está comendo com os garfos {garfo} e {garfo + 1}\033[0m")
 
         livres = [i + 1 for i in range(numero_filosofos) if uso_garfos[i] is None]
         if livres:
-            print(f"Garfo(s) {', '.join(map(str, livres))} livre(s)")
+            print(f"\033[1;32mGarfo(s) {', '.join(map(str, livres))} livre(s)\033[0m")
 
         print("-" * 40)
 
@@ -73,5 +81,6 @@ for i in range(numero_filosofos):
 
 for t in threads:
     t.join()
+
 
 

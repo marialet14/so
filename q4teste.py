@@ -17,8 +17,12 @@ def filosofo(id):
         time.sleep(random.uniform(0.5, 1.5))
 
         # Decide ordem de pegar os garfos pra evitar deadlock
-        primeiro = id if id % 2 == 0 else (id + 1) % NUM_FILOSOFOS
-        segundo = (id + 1) % NUM_FILOSOFOS if id % 2 == 0 else id
+        if id % 2 == 0:
+            primeiro = id
+            segundo = (id + 1) % NUM_FILOSOFOS
+        else:
+            primeiro = (id + 1) % NUM_FILOSOFOS
+            segundo = id
 
         with garfos[primeiro]:
             with garfos[segundo]:

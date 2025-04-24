@@ -13,12 +13,11 @@ def dividir_texto(texto, partes):
     tamanho = len(texto)
     segmento_len = tamanho // partes
     return [texto[i*segmento_len:(i+1)*segmento_len] for i in range(partes - 1)] + [texto[(partes-1)*segmento_len:]]
-#Essa linha retorna uma lista de strings — cada uma representando um segmento do texto.
 
 def main():
     inicio = time.time()
 
-    # Leitura do arquivo
+
     with open("Você deve implementar um programa q.txt", "r", encoding="utf-8") as f:
         texto = f.read().lower()
 
@@ -31,10 +30,10 @@ def main():
         threads.append(thread)
         thread.start()
     for thread in threads:
-        thread.join()     # Esperar todas as threads terminarem
+        thread.join()  
     contador_total = Counter()
     for c in contadores:
-        contador_total.update(c) #Junta todos os Counters em um só, somando as contagens
+        contador_total.update(c) 
 
     print(f"\nTop {N} palavras mais frequentes:")
     for palavra, freq in contador_total.most_common(N):

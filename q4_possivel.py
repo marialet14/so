@@ -26,11 +26,11 @@ def mostrar_situacao():
                 garfos_usados.append((i + 1, uso_garfos[i]))
 
         for garfo, filosofo in garfos_usados:
-            print(f"🍽️ {nomes[filosofo]} está comendo com os garfos {garfo} e {garfo + 1}")
+            print(f"{nomes[filosofo]} está comendo com os garfos {garfo} e {garfo + 1}")
 
         livres = [i + 1 for i in range(numero_filosofos) if uso_garfos[i] is None]
         if livres:
-            print(f"🍴 Garfo(s) {', '.join(map(str, livres))} livre(s)")
+            print(f"Garfo(s) {', '.join(map(str, livres))} livre(s)")
 
         print("-" * 40)
 
@@ -39,7 +39,7 @@ def filosofo(id):
     while time.time() - inicio < execucao:
         with mutex_estado:
             estados[id] = "pensando"
-        print(f"🧠 {nomes[id]} está pensando.")
+        print(f"{nomes[id]} está pensando.")
         time.sleep(random.uniform(0.5, 1.5))
 
         if id % 2 == 0:

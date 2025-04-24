@@ -2,20 +2,20 @@ import threading  # Importa a biblioteca para trabalhar com threads (execução 
 import time       # Importa a biblioteca para controlar o tempo de espera
 import random     # Importa a biblioteca para gerar números aleatórios
 
-NUM_FILOSOFOS = 5  # Define que haverá 5 filósofos
-TEMPO_EXECUCAO = 10  # Define o tempo que o programa vai rodar, em segundos
+numero_filosofos = 5  # Define que haverá 5 filósofos
+execucao = 10  # Define o tempo que o programa vai rodar, em segundos
 
 # Lista com os nomes dos filósofos
 nomes = ["Sócrates", "Platão", "Aristóteles", "Descartes", "Nietzsche"]
 
 # Lista que armazena o estado de cada filósofo (pensando inicialmente)
-estados = ["pensando"] * NUM_FILOSOFOS
+estados = ["pensando"] * numero_filosofos
 
 # Lista de garfos, representados por bloqueios (locks) para garantir acesso exclusivo
-garfos = [threading.Lock() for _ in range(NUM_FILOSOFOS)]
+garfos = [threading.Lock() for _ in range(numero_filosofos)]
 
 # Lista para verificar qual filósofo está usando cada garfo (inicialmente todos estão livres)
-uso_garfos = [None] * NUM_FILOSOFOS  
+uso_garfos = [None] * numero_filosofos  
 
 # Mutex para garantir que apenas um filósofo acesse os estados ao mesmo tempo
 mutex_estado = threading.Lock()
@@ -24,12 +24,12 @@ mutex_estado = threading.Lock()
 def mostrar_situacao():
     with mutex_estado:  # Garante que apenas um filósofo possa acessar a situação por vez
         # Mostrar o estado atual de cada filósofo
-        for i in range(NUM_FILOSOFOS):
+        for i in range(numero_filosofos):
             print(f"{nomes[i]:<12}: {estados[i]}")
 
         # Mostrar quais filósofos estão comendo e quais garfos estão sendo usados
         garfos_usados = []  # Lista para armazenar os filósofos comendo e os garfos que estão usando
-        for i in range(NUM_FILOSOFOS):
+        for i in range(numero_filosofos):
             if estados[i] == "comendo":  # Se o filósofo está comendo
                 garfos_usados.append((i + 1, uso_garfos[i]))  # Adiciona o filósofo e os garfos que ele está usando
 
@@ -38,7 +38,7 @@ def mostrar_situacao():
             print(f"🍽️ {nomes[filosofo]} está comendo com os garfos {garfo} e {garfo + 1}")
 
         # Mostrar quais garfos estão livres (não sendo usados por nenhum filósofo)
-        livres = [i + 1 for i in range(NUM_FILOSOFOS) if uso_garfos[i] is None]
+        livres = [i + 1 for i in range(numero_filosofos) if uso_garfos[i] is None]
         if livres:  # Se houver garfos livres
             print(f"🍴 Garfo(s) {', '.join(map(str, livres))} livre(s)")
 
@@ -47,7 +47,7 @@ def mostrar_situacao():
 # Função que simula a ação de cada filósofo
 def filosofo(id):
     inicio = time.time()  # Marca o tempo de início
-    while time.time() - inicio < TEMPO_EXECUCAO:  # Executa enquanto o tempo não passar do limite
+    while time.time() - inicio < execucao:  # Executa enquanto o tempo não passar do limite
         with mutex_estado:  # Garante que apenas um filósofo acesse o estado ao mesmo tempo
             estados[id] = "pensando"  # Marca o filósofo como pensando
         print(f"🧠 {nomes[id]} está pensando.")  # Exibe que o filósofo está pensando
@@ -56,9 +56,9 @@ def filosofo(id):
         # Decide a ordem dos garfos para evitar deadlock
         if id % 2 == 0:  # Se o id do filósofo for par
             primeiro = id
-            segundo = (id + 1) % NUM_FILOSOFOS  # O segundo garfo será o próximo filósofo
+            segundo = (id + 1) % numero_filosofos  # O segundo garfo será o próximo filósofo
         else:  # Se o id for ímpar
-            primeiro = (id + 1) % NUM_FILOSOFOS
+            primeiro = (id + 1) % numero_filosofos
             segundo = id  # O segundo garfo será o filósofo atual
 
         # Tenta pegar os garfos (garante que o filósofo pega garfos exclusivos)
@@ -85,7 +85,7 @@ def filosofo(id):
 
 # Cria uma lista de threads (uma para cada filósofo)
 threads = []
-for i in range(NUM_FILOSOFOS):
+for i in range(numero_filosofos):
     t = threading.Thread(target=filosofo, args=(i,))  # Cria uma thread para cada filósofo
     threads.append(t)
     t.start()  # Inicia a execução da thread
@@ -94,6 +94,3 @@ for i in range(NUM_FILOSOFOS):
 for t in threads:
     t.join()
 
-# Mostrar o estado final dos filósofos e dos garfos após todos terminarem
-print("\n📊 Estado final dos filósofos e dos garfos:")
-mostrar_situacao()  # Exibe a situação final

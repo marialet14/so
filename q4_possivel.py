@@ -39,7 +39,6 @@ def filosofo(id):
     while time.time() - inicio < execucao:
         with mutex_estado:
             estados[id] = "pensando"
-        print(f"{nomes[id]} está pensando.")
         time.sleep(random.uniform(0.5, 1.5))
 
         if id % 2 == 0:
@@ -56,7 +55,6 @@ def filosofo(id):
                     uso_garfos[primeiro] = id
                     uso_garfos[segundo] = id
 
-                print(f"🍽️ {nomes[id]} está comendo com os garfos {primeiro + 1} e {segundo + 1}.")
                 mostrar_situacao()
                 time.sleep(random.uniform(0.5, 1.5))
 
@@ -75,3 +73,5 @@ for i in range(numero_filosofos):
 
 for t in threads:
     t.join()
+
+
